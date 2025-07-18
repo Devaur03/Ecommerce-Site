@@ -70,7 +70,7 @@ export default function AdminLoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <p className="text-xs text-center text-muted-foreground">Hint: use `Devansh03`</p>
+            <p className="text-xs text-center text-muted-foreground">Hint: you know</p>
             <Button type="submit" className="w-full">
               Sign In
             </Button>

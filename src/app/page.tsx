@@ -34,11 +34,12 @@ export default async function Home() {
     <div className="flex flex-col">
       <section className="relative h-[60vh] w-full">
         <Image
-          src="https://placehold.co/1600x900.png"
+          src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1600&h=900&auto=format&fit=crop"
           alt="Stylish living room with modern furniture"
           data-ai-hint="furniture store"
           fill
           className="object-cover"
+          priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20" />
         <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white">

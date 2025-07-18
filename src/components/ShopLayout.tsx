@@ -10,21 +10,13 @@ import {
 } from '@/components/ui/sidebar';
 import { categories } from '@/lib/data';
 import Link from 'next/link';
-import { Button } from './ui/button';
 import { List } from 'lucide-react';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from './ui/breadcrumb';
 
 export default function ShopLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <Sidebar>
-        <SidebarHeader>
+        <SidebarHeader className="pt-20">
           <h2 className="font-headline text-2xl">Categories</h2>
         </SidebarHeader>
         <SidebarContent>

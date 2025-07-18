@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, Menu, UserCog, LogIn, LogOut, Heart, Search } from 'lucide-react';
+import { ShoppingCart, Menu, LogIn, LogOut, Heart, Search } from 'lucide-react';
 import Logo from '@/components/icons/Logo';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/hooks/useCart';
@@ -80,13 +80,6 @@ export default function Header() {
             </p>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/admin/login">
-            <UserCog className="mr-2 h-4 w-4" />
-            <span>Admin</span>
-          </Link>
-        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={signOut}>
           <LogOut className="mr-2 h-4 w-4" />

@@ -28,6 +28,7 @@ export default function Footer() {
               <li><Link href="#" className="text-sm text-muted-foreground hover:text-primary">Our Story</Link></li>
               <li><Link href="/contact" className="text-sm text-muted-foreground hover:text-primary">Contact Us</Link></li>
               <li><Link href="#" className="text-sm text-muted-foreground hover:text-primary">FAQs</Link></li>
+              <li><Link href="/admin/login" className="text-sm text-muted-foreground hover:text-primary">Admin</Link></li>
             </ul>
           </div>
           <div>

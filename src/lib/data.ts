@@ -45,7 +45,7 @@ export const products: Product[] = [
     name: 'Eames Lounge Chair',
     description: 'An iconic mid-century modern lounge chair and ottoman, offering unparalleled comfort and timeless style.',
     price: 1250.00,
-    images: ['https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1551298370-9d3d53740c72?q=80&w=600&h=600&auto=format&fit=crop'],
+    images: ['https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1551298370-9d3d53740c72?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1606744883195-7973a9b062e7?q=80&w=600&h=600&auto=format&fit=crop'],
     category: 'chairs',
     specs: {
       Material: 'Leather, Molded Plywood',
@@ -77,7 +77,7 @@ export const products: Product[] = [
     name: 'Upholstered Platform Bed',
     description: 'A chic and comfortable platform bed with a tufted headboard, wrapped in a soft linen-blend fabric.',
     price: 799.00,
-    images: ['https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1560185127-6ed189bf02a4?q=80&w=600&h=600&auto=format&fit=crop'],
+    images: ['https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1560185127-6ed189bf02a4?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=600&h=600&auto=format&fit=crop'],
     category: 'beds',
     specs: {
       Material: 'Linen-blend Fabric, Wood',
@@ -122,7 +122,7 @@ export const products: Product[] = [
     name: 'Modular Sectional Sofa',
     description: 'A versatile sectional sofa with movable modules to fit any room layout. Upholstered in a durable, stain-resistant fabric.',
     price: 1599.99,
-    images: ['https://images.unsplash.com/photo-1523755231516-e43fd2e8dca5?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1493663284031-b7e33ef2d92a?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1594895982297-849a63412599?q=80&w=600&h=600&auto=format&fit=crop'],
+    images: ['https://images.unsplash.com/photo-1523755231516-e43fd2e8dca5?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1493663284031-b7e33ef2d92a?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1616464916356-2a772ab1032d?q=80&w=600&h=600&auto=format&fit=crop'],
     category: 'sofas',
     specs: {
       Material: 'Performance Fabric',
@@ -137,7 +137,7 @@ export const products: Product[] = [
     name: 'Canopy Bed Frame',
     description: 'Create a statement with this elegant metal canopy bed. Its sleek, four-poster design adds a touch of romance and drama.',
     price: 950.00,
-    images: ['https://images.unsplash.com/photo-1599508003649-1d9e2652a265?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1616627780414-b6d16503de24?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1566605973348-740a3d76b6b7?q=80&w=600&h=600&auto=format&fit=crop'],
+    images: ['https://images.unsplash.com/photo-1599508003649-1d9e2652a265?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1566605973348-740a3d76b6b7?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1615964893424-9988b0213812?q=80&w=600&h=600&auto=format&fit=crop'],
     category: 'beds',
     specs: {
       Material: 'Steel',

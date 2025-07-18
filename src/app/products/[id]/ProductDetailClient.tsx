@@ -21,6 +21,14 @@ import ReviewsSection from '@/components/ReviewsSection';
 import { useWishlist } from '@/hooks/useWishlist';
 import { useAuth } from '@/hooks/useAuth';
 import type { Product, Category } from '@/types';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import { Card, CardContent } from '@/components/ui/card';
 
 interface ProductDetailClientProps {
   product: Product;
@@ -29,7 +37,6 @@ interface ProductDetailClientProps {
 
 export default function ProductDetailClient({ product, category }: ProductDetailClientProps) {
   const [quantity, setQuantity] = useState(1);
-  const [mainImage, setMainImage] = useState(0);
   const [isVisualizerOpen, setVisualizerOpen] = useState(false);
   const { addToCart } = useCart();
   const { toast } = useToast();
@@ -99,22 +106,27 @@ export default function ProductDetailClient({ product, category }: ProductDetail
       </Breadcrumb>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         <div>
-          <div className="relative mb-4 h-96 w-full overflow-hidden rounded-lg">
-            <Image
-              src={product.images[mainImage]}
-              alt={product.name}
-              fill
-              className="object-cover"
-              data-ai-hint="furniture product"
-            />
-          </div>
-          <div className="flex gap-2">
-            {product.images.map((img, index) => (
-              <button key={index} onClick={() => setMainImage(index)} className={`relative h-20 w-20 overflow-hidden rounded-md border-2 ${mainImage === index ? 'border-primary' : 'border-transparent'}`}>
-                <Image src={img} alt={`${product.name} thumbnail ${index + 1}`} fill className="object-cover" />
-              </button>
-            ))}
-          </div>
+           <Carousel className="w-full max-w-xl mx-auto">
+              <CarouselContent>
+                {product.images.map((img, index) => (
+                  <CarouselItem key={index}>
+                    <Card>
+                      <CardContent className="relative flex aspect-square items-center justify-center p-0">
+                         <Image
+                          src={img}
+                          alt={`${product.name} image ${index + 1}`}
+                          fill
+                          className="rounded-lg object-cover"
+                          data-ai-hint="furniture product"
+                        />
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute left-2" />
+              <CarouselNext className="absolute right-2" />
+            </Carousel>
         </div>
         <div>
           <h1 className="font-headline text-4xl font-bold">{product.name}</h1>

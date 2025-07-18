@@ -1,3 +1,11 @@
+export interface Review {
+    id: number;
+    rating: number;
+    comment: string;
+    author: string;
+    date: string;
+}
+
 export interface Product {
   id: number;
   name: string;
@@ -7,6 +15,7 @@ export interface Product {
   category: string;
   specs: Record<string, string>;
   stock: number;
+  reviews: Review[];
 }
 
 export interface Category {
@@ -22,4 +31,11 @@ export interface CartItem {
   price: number;
   image: string;
   quantity: number;
+}
+
+export interface WishlistItem {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
 }

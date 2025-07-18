@@ -15,10 +15,13 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { Separator } from '@/components/ui/separator';
-import { Minus, Plus, Sparkles } from 'lucide-react';
+import { Minus, Plus, Sparkles, Heart } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
 import RoomVisualizerDialog from '@/components/RoomVisualizerDialog';
+import ReviewsSection from '@/components/ReviewsSection';
+import { useWishlist } from '@/hooks/useWishlist';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function ProductDetailPage({ params }: { params: { id: string } }) {
   const [quantity, setQuantity] = useState(1);
@@ -26,12 +29,16 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const [isVisualizerOpen, setVisualizerOpen] = useState(false);
   const { addToCart } = useCart();
   const { toast } = useToast();
+  const { user } = useAuth();
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
 
   const product = products.find((p) => p.id.toString() === params.id);
 
   if (!product) {
     notFound();
   }
+  
+  const isWishlisted = wishlist.some(item => item.id === product.id);
 
   const category = categories.find(c => c.slug === product.category);
 
@@ -42,6 +49,31 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
       description: `${quantity} x ${product.name} has been added to your cart.`,
     });
   };
+
+  const handleWishlistToggle = () => {
+    if (!user) {
+      toast({
+        variant: 'destructive',
+        title: 'Please sign in',
+        description: 'You need to be signed in to add items to your wishlist.',
+      });
+      return;
+    }
+    if (isWishlisted) {
+      removeFromWishlist(product.id);
+      toast({
+        title: 'Removed from wishlist',
+        description: `${product.name} has been removed from your wishlist.`,
+      });
+    } else {
+      addToWishlist(product);
+      toast({
+        title: 'Added to wishlist!',
+        description: `${product.name} has been added to your wishlist.`,
+      });
+    }
+  };
+
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -105,6 +137,9 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               </Button>
             </div>
             <Button size="lg" onClick={handleAddToCart}>Add to Cart</Button>
+            <Button variant="outline" size="icon" onClick={handleWishlistToggle} title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}>
+              <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-destructive text-destructive' : ''}`} />
+            </Button>
           </div>
 
           <Button variant="outline" className="mt-4" onClick={() => setVisualizerOpen(true)}>
@@ -124,6 +159,8 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
           </div>
         </div>
       </div>
+       <Separator className="my-12" />
+      <ReviewsSection productId={product.id} reviews={product.reviews} />
       <RoomVisualizerDialog open={isVisualizerOpen} onOpenChange={setVisualizerOpen} product={product} />
     </div>
   );

@@ -22,9 +22,19 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+      },
+       {
+        protocol: 'https',
         hostname: 'encrypted-tbn0.gstatic.com',
       }
     ],
+  },
+  experimental: {
+    // This is to allow cross-origin requests from the Firebase Studio dev environment
+    allowedDevOrigins: [
+      '*.cloudworkstations.dev',
+    ]
   },
 };
 

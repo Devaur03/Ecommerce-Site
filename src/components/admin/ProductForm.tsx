@@ -50,7 +50,7 @@ const defaultProduct: FormData = {
 
 export default function ProductForm({ isOpen, onOpenChange, product, onSubmit }: ProductFormProps) {
   const [formData, setFormData] = useState<FormData>(defaultProduct);
-  const [uploadProgress, setUploadProgress] = useState<number[] | null>([null, null, null]);
+  const [uploadProgress, setUploadProgress] = useState<(number | null)[]>([null, null, null]);
   const { toast } = useToast();
 
   useEffect(() => {

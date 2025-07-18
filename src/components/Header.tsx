@@ -26,6 +26,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { useWishlist } from '@/hooks/useWishlist';
 import { Input } from './ui/input';
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -96,12 +97,12 @@ export default function Header() {
   );
   
   const SearchForm = ({ inSheet = false }: { inSheet?: boolean }) => (
-    <form onSubmit={handleSearchSubmit} className={cn("flex-1 max-w-sm ml-6", inSheet ? 'ml-0' : 'hidden md:flex')}>
-       <div className="relative w-full">
+    <form onSubmit={handleSearchSubmit} className={cn("w-full max-w-sm", inSheet ? '' : 'hidden md:block')}>
+       <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input 
             placeholder="Search products..." 
-            className="w-full pl-9" 
+            className="w-full pl-9 bg-background/50" 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -111,24 +112,28 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-        <Logo />
-        <nav className="hidden items-center gap-6 text-sm md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                'transition-colors hover:text-primary',
-                pathname === link.href ? 'text-primary font-semibold' : 'text-foreground/60'
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+      <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 gap-4">
+        <div className="flex items-center gap-6">
+          <Logo />
+          <nav className="hidden items-center gap-6 text-sm md:flex">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  'transition-colors hover:text-primary',
+                  pathname === link.href ? 'text-primary font-semibold' : 'text-foreground/60'
+                )}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
 
-        <SearchForm />
+        <div className="flex-1 flex justify-center">
+            <SearchForm />
+        </div>
 
         <div className="flex items-center gap-2">
            <Button asChild variant="ghost" size="icon" className="relative">
@@ -154,6 +159,8 @@ export default function Header() {
             </Link>
           </Button>
           
+          <ThemeSwitcher />
+
           {user ? (
             <UserMenu />
           ) : (

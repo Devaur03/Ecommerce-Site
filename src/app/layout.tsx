@@ -8,6 +8,7 @@ import { CartProvider } from '@/context/CartProvider';
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from '@/context/AuthProvider';
 import { WishlistProvider } from '@/context/WishlistProvider';
+import { ThemeProvider } from '@/context/ThemeProvider';
 
 const fontBody = Inter({
   subsets: ['latin'],
@@ -46,18 +47,25 @@ export default function RootLayout({
           fontHeadline.variable
         )}
       >
-        <AuthProvider>
-          <CartProvider>
-            <WishlistProvider>
-              <div className="relative flex min-h-dvh flex-col bg-background">
-                <Header />
-                <main className="flex-1 pt-16">{children}</main>
-                <Footer />
-              </div>
-              <Toaster />
-            </WishlistProvider>
-          </CartProvider>
-        </AuthProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            <CartProvider>
+              <WishlistProvider>
+                <div className="relative flex min-h-dvh flex-col bg-background">
+                  <Header />
+                  <main className="flex-1 pt-16">{children}</main>
+                  <Footer />
+                </div>
+                <Toaster />
+              </WishlistProvider>
+            </CartProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

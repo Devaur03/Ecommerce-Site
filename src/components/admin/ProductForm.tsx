@@ -24,14 +24,16 @@ import {
 import type { Product } from '@/types';
 import { categories } from '@/lib/data';
 
+type FormData = Omit<Product, 'id' | '_id' | 'reviews'>
+
 interface ProductFormProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   product: Product | null;
-  onSubmit: (product: Product) => void;
+  onSubmit: (product: FormData & { id?: number }) => void;
 }
 
-const defaultProduct: Omit<Product, 'id'> = {
+const defaultProduct: FormData = {
   name: '',
   description: '',
   price: 0,
@@ -42,18 +44,23 @@ const defaultProduct: Omit<Product, 'id'> = {
 };
 
 export default function ProductForm({ isOpen, onOpenChange, product, onSubmit }: ProductFormProps) {
-  const [formData, setFormData] = useState<Product | Omit<Product, 'id'>>(
-    product || defaultProduct
-  );
+  const [formData, setFormData] = useState<FormData>(defaultProduct);
 
   useEffect(() => {
-    setFormData(product || defaultProduct);
+    if (isOpen) {
+        if (product) {
+            const { _id, id, reviews, ...editableData } = product;
+            setFormData(editableData);
+        } else {
+            setFormData(defaultProduct);
+        }
+    }
   }, [product, isOpen]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    const isNumber = type === 'number';
-    setFormData((prev) => ({ ...prev, [name]: isNumber ? parseFloat(value) : value }));
+    const { name, value } = e.target;
+    const isNumberField = name === 'price' || name === 'stock';
+    setFormData((prev) => ({ ...prev, [name]: isNumberField ? parseFloat(value) || 0 : value }));
   };
 
   const handleSpecChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +74,12 @@ export default function ProductForm({ isOpen, onOpenChange, product, onSubmit }:
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData as Product);
+    const submissionData = { ...formData };
+    if (product) {
+        // @ts-ignore
+        submissionData.id = product.id;
+    }
+    onSubmit(submissionData);
   };
 
   return (
@@ -94,7 +106,7 @@ export default function ProductForm({ isOpen, onOpenChange, product, onSubmit }:
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="category" className="text-right">Category</Label>
-            <Select name="category" onValueChange={handleCategoryChange} defaultValue={formData.category}>
+            <Select name="category" onValueChange={handleCategoryChange} value={formData.category}>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
@@ -113,19 +125,27 @@ export default function ProductForm({ isOpen, onOpenChange, product, onSubmit }:
             <Label htmlFor="image" className="text-right">Image URL</Label>
             <Input id="image" name="image" value={formData.images[0]} onChange={(e) => setFormData(prev => ({...prev, images: [e.target.value]}))} className="col-span-3" required />
           </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="image2" className="text-right">Image URL 2</Label>
+            <Input id="image2" name="image2" value={formData.images[1] || ''} onChange={(e) => setFormData(prev => ({...prev, images: [prev.images[0], e.target.value, prev.images[2] || '']}))} className="col-span-3" />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="image3" className="text-right">Image URL 3</Label>
+            <Input id="image3" name="image3" value={formData.images[2] || ''} onChange={(e) => setFormData(prev => ({...prev, images: [prev.images[0], prev.images[1] || '', e.target.value]}))} className="col-span-3" />
+          </div>
 
           <h3 className="font-headline text-lg mt-4 col-span-4">Specifications</h3>
            <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="Material" className="text-right">Material</Label>
-            <Input id="Material" name="Material" value={formData.specs.Material} onChange={handleSpecChange} className="col-span-3" />
+            <Input id="Material" name="Material" value={formData.specs.Material || ''} onChange={handleSpecChange} className="col-span-3" />
           </div>
            <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="Dimensions" className="text-right">Dimensions</Label>
-            <Input id="Dimensions" name="Dimensions" value={formData.specs.Dimensions} onChange={handleSpecChange} className="col-span-3" />
+            <Input id="Dimensions" name="Dimensions" value={formData.specs.Dimensions || ''} onChange={handleSpecChange} className="col-span-3" />
           </div>
            <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="Color" className="text-right">Color</Label>
-            <Input id="Color" name="Color" value={formData.specs.Color} onChange={handleSpecChange} className="col-span-3" />
+            <Input id="Color" name="Color" value={formData.specs.Color || ''} onChange={handleSpecChange} className="col-span-3" />
           </div>
 
           <DialogFooter>

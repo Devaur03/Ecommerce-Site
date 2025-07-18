@@ -19,17 +19,18 @@ import {
 } from "@/components/ui/alert-dialog"
 import { MoreHorizontal, PlusCircle, Trash2, Edit, LogOut } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { products as initialProducts } from '@/lib/data';
 import type { Product } from '@/types';
 import { formatPrice } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import ProductForm from '@/components/admin/ProductForm';
 import Logo from '@/components/icons/Logo';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function AdminDashboardPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isFormOpen, setFormOpen] = useState(false);
   const [isDeleteAlertOpen, setDeleteAlertOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -40,8 +41,23 @@ export default function AdminDashboardPage() {
     const isAuthenticated = localStorage.getItem('ff_admin_auth') === 'true';
     if (!isAuthenticated) {
       router.replace('/admin/login');
+    } else {
+        fetchProducts();
     }
   }, [router]);
+    
+  const fetchProducts = async () => {
+      try {
+          setLoading(true);
+          const res = await fetch('/api/products');
+          const data = await res.json();
+          setProducts(data);
+      } catch (error) {
+          toast({ variant: 'destructive', title: 'Error fetching products', description: 'Could not load product data.' });
+      } finally {
+          setLoading(false);
+      }
+  }
 
   const handleLogout = () => {
     localStorage.removeItem('ff_admin_auth');
@@ -64,29 +80,72 @@ export default function AdminDashboardPage() {
     setDeleteAlertOpen(true);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (productToDelete) {
-      setProducts(products.filter((p) => p.id !== productToDelete.id));
-      toast({ title: "Product Deleted", description: `"${productToDelete.name}" has been removed.` });
+      try {
+        const res = await fetch(`/api/products/${productToDelete.id}`, {
+            method: 'DELETE'
+        });
+        if (!res.ok) throw new Error('Failed to delete');
+        
+        setProducts(products.filter((p) => p.id !== productToDelete.id));
+        toast({ title: "Product Deleted", description: `"${productToDelete.name}" has been removed.` });
+
+      } catch (error) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Failed to delete product.' });
+      }
     }
     setDeleteAlertOpen(false);
     setProductToDelete(null);
   };
 
-  const handleFormSubmit = (productData: Product) => {
-    if (selectedProduct) {
-      // Update existing product
-      setProducts(products.map(p => p.id === productData.id ? productData : p));
-      toast({ title: "Product Updated", description: `"${productData.name}" has been updated.` });
-    } else {
-      // Add new product
-      const newProduct = { ...productData, id: Date.now() }; // Simple unique ID
-      setProducts([newProduct, ...products]);
-      toast({ title: "Product Added", description: `"${productData.name}" has been added.` });
+  const handleFormSubmit = async (productData: Omit<Product, 'id' | '_id' | 'reviews'> & { id?: number }) => {
+    const isUpdating = selectedProduct !== null;
+    const url = isUpdating ? `/api/products/${selectedProduct?.id}` : '/api/products';
+    const method = isUpdating ? 'PUT' : 'POST';
+
+    try {
+        const res = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productData),
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.error || 'Something went wrong');
+        }
+        
+        const savedProduct = await res.json();
+
+        if (isUpdating) {
+          setProducts(products.map(p => p.id === savedProduct.id ? savedProduct : p));
+          toast({ title: "Product Updated", description: `"${savedProduct.name}" has been updated.` });
+        } else {
+          setProducts([savedProduct, ...products]);
+          toast({ title: "Product Added", description: `"${savedProduct.name}" has been added.` });
+        }
+        
+        setFormOpen(false);
+        setSelectedProduct(null);
+
+    } catch (error: any) {
+        toast({ variant: 'destructive', title: 'Error', description: error.message });
     }
-    setFormOpen(false);
-    setSelectedProduct(null);
   }
+
+  const renderSkeleton = () => (
+      [...Array(5)].map((_, i) => (
+        <TableRow key={i}>
+            <TableCell className="hidden sm:table-cell"><Skeleton className="h-16 w-16 rounded-md" /></TableCell>
+            <TableCell><Skeleton className="h-4 w-40" /></TableCell>
+            <TableCell><Skeleton className="h-4 w-20" /></TableCell>
+            <TableCell><Skeleton className="h-4 w-16" /></TableCell>
+            <TableCell><Skeleton className="h-4 w-12" /></TableCell>
+            <TableCell><Skeleton className="h-8 w-8" /></TableCell>
+        </TableRow>
+      ))
+  );
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -124,7 +183,7 @@ export default function AdminDashboardPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {products.map((product) => (
+                {loading ? renderSkeleton() : products.map((product) => (
                   <TableRow key={product.id}>
                     <TableCell className="hidden sm:table-cell">
                       <Image
@@ -166,9 +225,11 @@ export default function AdminDashboardPage() {
             </Table>
           </CardContent>
           <CardFooter>
-            <div className="text-xs text-muted-foreground">
-              Showing <strong>1-{products.length}</strong> of <strong>{products.length}</strong> products
-            </div>
+             { !loading &&
+                <div className="text-xs text-muted-foreground">
+                    Showing <strong>1-{products.length}</strong> of <strong>{products.length}</strong> products
+                </div>
+            }
           </CardFooter>
         </Card>
       </main>
@@ -191,10 +252,11 @@ export default function AdminDashboardPage() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
   );
 }
+

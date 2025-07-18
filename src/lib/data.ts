@@ -1,0 +1,123 @@
+import type { Product, Category } from '@/types';
+
+export const categories: Category[] = [
+  { id: 1, name: 'Sofas', slug: 'sofas', image: 'https://placehold.co/400x400.png' },
+  { id: 2, name: 'Chairs', slug: 'chairs', image: 'https://placehold.co/400x400.png' },
+  { id: 3, name: 'Tables', slug: 'tables', image: 'https://placehold.co/400x400.png' },
+  { id: 4, name: 'Beds', slug: 'beds', image: 'https://placehold.co/400x400.png' },
+];
+
+export const products: Product[] = [
+  {
+    id: 1,
+    name: 'Modern Velvet Sofa',
+    description: 'A plush velvet sofa that combines modern design with classic comfort. Perfect for any contemporary living room.',
+    price: 899.99,
+    images: ['https://placehold.co/600x600.png', 'https://placehold.co/600x600.png', 'https://placehold.co/600x600.png'],
+    category: 'sofas',
+    specs: {
+      Material: 'Velvet, Solid Wood Frame',
+      Dimensions: '84"W x 35"D x 30"H',
+      Color: 'Deep Blue',
+    },
+    stock: 15,
+  },
+  {
+    id: 2,
+    name: 'Eames Lounge Chair',
+    description: 'An iconic mid-century modern lounge chair and ottoman, offering unparalleled comfort and timeless style.',
+    price: 1250.00,
+    images: ['https://placehold.co/600x600.png', 'https://placehold.co/600x600.png'],
+    category: 'chairs',
+    specs: {
+      Material: 'Leather, Molded Plywood',
+      Dimensions: '32.75"W x 32.75"D x 32"H',
+      Color: 'Black Leather, Walnut',
+    },
+    stock: 8,
+  },
+  {
+    id: 3,
+    name: 'Scandinavian Dining Table',
+    description: 'A minimalist dining table crafted from solid oak, featuring clean lines and a natural finish. Seats up to six people.',
+    price: 650.00,
+    images: ['https://placehold.co/600x600.png'],
+    category: 'tables',
+    specs: {
+      Material: 'Solid Oak',
+      Dimensions: '72"L x 36"W x 30"H',
+      Color: 'Natural Oak',
+    },
+    stock: 20,
+  },
+  {
+    id: 4,
+    name: 'Upholstered Platform Bed',
+    description: 'A chic and comfortable platform bed with a tufted headboard, wrapped in a soft linen-blend fabric.',
+    price: 799.00,
+    images: ['https://placehold.co/600x600.png', 'https://placehold.co/600x600.png'],
+    category: 'beds',
+    specs: {
+      Material: 'Linen-blend Fabric, Wood',
+      Dimensions: '63"W x 85"L x 45"H (Queen)',
+      Color: 'Light Gray',
+    },
+    stock: 12,
+  },
+  {
+    id: 5,
+    name: 'Leather Lawson Armchair',
+    description: 'A classic armchair with supple top-grain leather and a sturdy hardwood frame. Ages beautifully over time.',
+    price: 950.00,
+    images: ['https://placehold.co/600x600.png'],
+    category: 'chairs',
+    specs: {
+      Material: 'Top-grain Leather',
+      Dimensions: '40"W x 38"D x 34"H',
+      Color: 'Caramel Brown',
+    },
+    stock: 10,
+  },
+  {
+    id: 6,
+    name: 'Industrial Coffee Table',
+    description: 'A rustic coffee table combining a solid mango wood top with a sturdy iron base. Adds character to any living space.',
+    price: 350.00,
+    images: ['https://placehold.co/600x600.png'],
+    category: 'tables',
+    specs: {
+      Material: 'Mango Wood, Iron',
+      Dimensions: '48"L x 24"W x 18"H',
+      Color: 'Walnut Finish, Black Base',
+    },
+    stock: 25,
+  },
+  {
+    id: 7,
+    name: 'Modular Sectional Sofa',
+    description: 'A versatile sectional sofa with movable modules to fit any room layout. Upholstered in a durable, stain-resistant fabric.',
+    price: 1599.99,
+    images: ['https://placehold.co/600x600.png'],
+    category: 'sofas',
+    specs: {
+      Material: 'Performance Fabric',
+      Dimensions: '120"W x 90"D x 32"H',
+      Color: 'Charcoal Gray',
+    },
+    stock: 5,
+  },
+  {
+    id: 8,
+    name: 'Canopy Bed Frame',
+    description: 'Create a statement with this elegant metal canopy bed. Its sleek, four-poster design adds a touch of romance and drama.',
+    price: 950.00,
+    images: ['https://placehold.co/600x600.png'],
+    category: 'beds',
+    specs: {
+      Material: 'Steel',
+      Dimensions: '79"W x 83"L x 80"H (King)',
+      Color: 'Matte Black',
+    },
+    stock: 7,
+  },
+];

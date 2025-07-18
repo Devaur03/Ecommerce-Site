@@ -6,7 +6,7 @@ import { ShoppingCart, Menu, UserCog, LogIn, LogOut, Heart, Search } from 'lucid
 import Logo from '@/components/icons/Logo';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/hooks/useCart';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import {
   Sheet,
@@ -21,7 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { useWishlist } from '@/hooks/useWishlist';
@@ -37,13 +37,28 @@ export default function Header() {
   const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
   const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
 
+  useEffect(() => {
+    // Sync search input with URL query param
+    setSearchQuery(searchParams.get('q') || '');
+  }, [searchParams]);
 
   if (pathname.startsWith('/admin')) {
     return null; // Don't render header for admin pages
   }
+
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      if(isMobileMenuOpen) setMobileMenuOpen(false);
+    }
+  };
 
   const UserMenu = () => (
     <DropdownMenu>
@@ -79,6 +94,20 @@ export default function Header() {
       </DropdownMenuContent>
     </DropdownMenu>
   );
+  
+  const SearchForm = ({ inSheet = false }: { inSheet?: boolean }) => (
+    <form onSubmit={handleSearchSubmit} className={cn("flex-1 max-w-sm ml-6", inSheet ? 'ml-0' : 'hidden md:flex')}>
+       <div className="relative w-full">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Search products..." 
+            className="w-full pl-9" 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+      </div>
+    </form>
+  );
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -99,30 +128,25 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="hidden md:flex flex-1 max-w-sm ml-6">
-             <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search products..." className="w-full pl-9" />
-            </div>
-        </div>
+        <SearchForm />
 
         <div className="flex items-center gap-2">
-           <Button asChild variant="ghost" size="icon">
+           <Button asChild variant="ghost" size="icon" className="relative">
             <Link href="/wishlist">
               <Heart className="h-5 w-5" />
               {user && wishlistCount > 0 && (
-                <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                   {wishlistCount}
                 </span>
               )}
               <span className="sr-only">Wishlist</span>
             </Link>
           </Button>
-          <Button asChild variant="ghost" size="icon">
+          <Button asChild variant="ghost" size="icon" className="relative">
             <Link href="/cart">
               <ShoppingCart className="h-5 w-5" />
               {cartCount > 0 && (
-                <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                   {cartCount}
                 </span>
               )}
@@ -151,10 +175,7 @@ export default function Header() {
             <SheetContent side="left">
               <div className="flex flex-col gap-6 p-4">
                 <Logo />
-                 <div className="relative w-full">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="Search products..." className="w-full pl-9" />
-                </div>
+                 <SearchForm inSheet={true} />
                 <nav className="flex flex-col gap-4">
                   {navLinks.map((link) => (
                      <Link

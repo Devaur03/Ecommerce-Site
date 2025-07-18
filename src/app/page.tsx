@@ -2,13 +2,35 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { categories, products } from '@/lib/data';
 import CategoryCard from '@/components/CategoryCard';
 import ProductCard from '@/components/ProductCard';
 import { ArrowRight } from 'lucide-react';
+import clientPromise from '@/lib/mongodb';
+import type { Product, Category } from '@/types';
 
-export default function Home() {
-  const featuredProducts = products.slice(0, 4);
+async function getHomePageData() {
+  try {
+    const client = await clientPromise;
+    const db = client.db("furnish-flow"); // Use your database name
+
+    const productsCollection = db.collection<Product>('products');
+    const categoriesCollection = db.collection<Category>('categories');
+
+    const featuredProducts = await productsCollection.find({}).limit(4).toArray();
+    const categories = await categoriesCollection.find({}).toArray();
+
+    return {
+      featuredProducts: JSON.parse(JSON.stringify(featuredProducts)) as Product[],
+      categories: JSON.parse(JSON.stringify(categories)) as Category[],
+    };
+  } catch (e) {
+    console.error(e);
+    return { featuredProducts: [], categories: [] };
+  }
+}
+
+export default async function Home() {
+  const { featuredProducts, categories } = await getHomePageData();
 
   return (
     <div className="flex flex-col">

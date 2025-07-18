@@ -1,5 +1,7 @@
+import type { ObjectId } from 'mongodb';
 
 export interface Review {
+    _id?: ObjectId;
     id: number;
     rating: number;
     comment: string;
@@ -8,6 +10,7 @@ export interface Review {
 }
 
 export interface Product {
+  _id?: ObjectId;
   id: number;
   name: string;
   description: string;
@@ -20,6 +23,7 @@ export interface Product {
 }
 
 export interface Category {
+  _id?: ObjectId;
   id: number;
   name: string;
   slug: string;

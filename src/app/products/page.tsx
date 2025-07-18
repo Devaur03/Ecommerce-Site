@@ -1,4 +1,3 @@
-import { products } from '@/lib/data';
 import ProductCard from '@/components/ProductCard';
 import {
   Breadcrumb,
@@ -8,8 +7,24 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import clientPromise from '@/lib/mongodb';
+import type { Product } from '@/types';
 
-export default function ProductsPage() {
+async function getProducts(): Promise<Product[]> {
+  try {
+    const client = await clientPromise;
+    const db = client.db("furnish-flow"); // Use your database name
+    const products = await db.collection('products').find({}).toArray();
+    return JSON.parse(JSON.stringify(products)) as Product[];
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
+export default async function ProductsPage() {
+  const products = await getProducts();
+  
   return (
     <div className="container mx-auto px-4 py-8">
       <Breadcrumb className="mb-8">

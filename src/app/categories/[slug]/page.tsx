@@ -1,4 +1,3 @@
-import { products, categories } from '@/lib/data';
 import ProductCard from '@/components/ProductCard';
 import { notFound } from 'next/navigation';
 import {
@@ -9,16 +8,37 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import clientPromise from '@/lib/mongodb';
+import type { Product, Category } from '@/types';
 
-export default function CategoryPage({ params }: { params: { slug: string } }) {
-  const category = categories.find(c => c.slug === params.slug);
+async function getCategoryData(slug: string) {
+  try {
+    const client = await clientPromise;
+    const db = client.db("furnish-flow");
+
+    const category = await db.collection('categories').findOne({ slug: slug });
+    if (!category) {
+      return { category: null, products: [] };
+    }
+
+    const products = await db.collection('products').find({ category: slug }).toArray();
+
+    return {
+      category: JSON.parse(JSON.stringify(category)) as Category,
+      products: JSON.parse(JSON.stringify(products)) as Product[],
+    };
+  } catch (e) {
+    console.error(e);
+    return { category: null, products: [] };
+  }
+}
+
+export default async function CategoryPage({ params }: { params: { slug: string } }) {
+  const { category, products: categoryProducts } = await getCategoryData(params.slug);
+
   if (!category) {
     notFound();
   }
-
-  const categoryProducts = products.filter(
-    (product) => product.category === params.slug
-  );
 
   return (
     <div className="container mx-auto px-4 py-8">

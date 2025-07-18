@@ -226,4 +226,3 @@ export const products: Product[] = [
     reviews: [],
   },
 ];
-    

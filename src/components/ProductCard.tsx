@@ -11,7 +11,10 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const imageUrl = product.images && product.images.length > 0 ? product.images[0] : 'https://placehold.co/600x600.png';
+  // Use a placeholder if images array is missing, empty, or the first image URL is an empty string.
+  const imageUrl = product.images && product.images.length > 0 && product.images[0]
+    ? product.images[0]
+    : 'https://placehold.co/600x600.png';
 
   return (
     <Card className="group overflow-hidden rounded-lg shadow-sm transition-shadow hover:shadow-lg">

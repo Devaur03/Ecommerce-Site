@@ -7,14 +7,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import clientPromise from '@/lib/mongodb';
+import { getProductsCollection } from '@/lib/mongodb';
 import type { Product } from '@/types';
 
 async function getProducts(): Promise<Product[]> {
   try {
-    const client = await clientPromise;
-    const db = client.db("furnish-flow"); // Use your database name
-    const products = await db.collection('products').find({}).toArray();
+    const productsCollection = await getProductsCollection();
+    const products = await productsCollection.find({}).toArray();
     return JSON.parse(JSON.stringify(products)) as Product[];
   } catch (e) {
     console.error(e);
@@ -43,7 +42,7 @@ export default async function ProductsPage() {
       </h1>
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product._id?.toString()} product={product} />
         ))}
       </div>
     </div>

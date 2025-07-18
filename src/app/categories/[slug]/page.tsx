@@ -8,20 +8,20 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import clientPromise from '@/lib/mongodb';
+import { getCategoriesCollection, getProductsCollection } from '@/lib/mongodb';
 import type { Product, Category } from '@/types';
 
 async function getCategoryData(slug: string) {
   try {
-    const client = await clientPromise;
-    const db = client.db("furnish-flow");
+    const categoriesCollection = await getCategoriesCollection();
+    const productsCollection = await getProductsCollection();
 
-    const category = await db.collection('categories').findOne({ slug: slug });
+    const category = await categoriesCollection.findOne({ slug: slug });
     if (!category) {
       return { category: null, products: [] };
     }
 
-    const products = await db.collection('products').find({ category: slug }).toArray();
+    const products = await productsCollection.find({ category: slug }).toArray();
 
     return {
       category: JSON.parse(JSON.stringify(category)) as Category,
@@ -59,7 +59,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
       {categoryProducts.length > 0 ? (
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {categoryProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product._id?.toString()} product={product} />
           ))}
         </div>
       ) : (

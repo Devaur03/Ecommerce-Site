@@ -5,16 +5,13 @@ import { Card, CardContent } from '@/components/ui/card';
 import CategoryCard from '@/components/CategoryCard';
 import ProductCard from '@/components/ProductCard';
 import { ArrowRight } from 'lucide-react';
-import clientPromise from '@/lib/mongodb';
+import { getProductsCollection, getCategoriesCollection } from '@/lib/mongodb';
 import type { Product, Category } from '@/types';
 
 async function getHomePageData() {
   try {
-    const client = await clientPromise;
-    const db = client.db("furnish-flow"); // Use your database name
-
-    const productsCollection = db.collection<Product>('products');
-    const categoriesCollection = db.collection<Category>('categories');
+    const productsCollection = await getProductsCollection();
+    const categoriesCollection = await getCategoriesCollection();
 
     const featuredProducts = await productsCollection.find({}).limit(4).toArray();
     const categories = await categoriesCollection.find({}).limit(4).toArray();
@@ -64,7 +61,7 @@ export default async function Home() {
           </h2>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {categories.map((category) => (
-              <CategoryCard key={category.id} category={category} />
+              <CategoryCard key={category._id?.toString()} category={category} />
             ))}
           </div>
         </div>
@@ -77,7 +74,7 @@ export default async function Home() {
           </h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product._id?.toString()} product={product} />
             ))}
           </div>
           <div className="mt-12 text-center">
@@ -90,5 +87,3 @@ export default async function Home() {
     </div>
   );
 }
-
-    

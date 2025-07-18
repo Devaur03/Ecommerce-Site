@@ -1,4 +1,5 @@
 import { MongoClient } from 'mongodb'
+import type { Product, Category } from '@/types';
 
 if (!process.env.MONGODB_URI) {
   throw new Error('Invalid/Missing environment variable: "MONGODB_URI"')
@@ -31,3 +32,18 @@ if (process.env.NODE_ENV === 'development') {
 // Export a module-scoped MongoClient promise. By doing this in a
 // separate module, the client can be shared across functions.
 export default clientPromise
+
+const getDb = async () => {
+    const client = await clientPromise;
+    return client.db("furnish-flow");
+}
+
+export const getProductsCollection = async () => {
+    const db = await getDb();
+    return db.collection<Product>('products');
+}
+
+export const getCategoriesCollection = async () => {
+    const db = await getDb();
+    return db.collection<Category>('categories');
+}

@@ -6,7 +6,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyAZWLYSZwXzt0DXbCC-5j6dIyLz9eY5_Vk",
   authDomain: "ecommercefurniture03.firebaseapp.com",
   projectId: "ecommercefurniture03",
-  storageBucket: "ecommercefurniture03.firebasestorage.app",
+  storageBucket: "ecommercefurniture03.appspot.com",
   messagingSenderId: "253443713410",
   appId: "1:253443713410:web:d6dd430a62302612d7879b",
   measurementId: "G-Y6S07K2S3E"

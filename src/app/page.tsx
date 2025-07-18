@@ -6,16 +6,24 @@ import { Card, CardContent } from '@/components/ui/card';
 import CategoryCard from '@/components/CategoryCard';
 import ProductCard from '@/components/ProductCard';
 import { ArrowRight } from 'lucide-react';
-import { getProductsCollection, getCategoriesCollection } from '@/lib/mongodb';
+import { getProductsCollection } from '@/lib/mongodb';
+import { categories as staticCategories } from '@/lib/data';
 import type { Product, Category } from '@/types';
 
 async function getHomePageData() {
   try {
     const productsCollection = await getProductsCollection();
-    const categoriesCollection = await getCategoriesCollection();
 
-    const featuredProducts = await productsCollection.find({}).limit(4).toArray();
-    const categories = await categoriesCollection.find({}).limit(4).toArray();
+    // Fetch featured products
+    const featuredProducts = await productsCollection.find({}).sort({ _id: -1 }).limit(4).toArray();
+
+    // Dynamically get categories from products in the database
+    const productCategories = await productsCollection.distinct('category');
+    
+    // Map the dynamic category slugs to the full static category data (for images, names)
+    const categories = staticCategories
+      .filter(cat => productCategories.includes(cat.slug))
+      .slice(0, 4); // Limit to 4 categories on the homepage
 
     return {
       featuredProducts: JSON.parse(JSON.stringify(featuredProducts)) as Product[],
@@ -56,34 +64,42 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="categories" className="py-12 md:py-24">
-        <div className="container mx-auto px-4">
-          <h2 className="mb-12 text-center font-headline text-4xl font-bold">
-            Shop by Category
-          </h2>
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {categories.map((category) => (
-              <CategoryCard key={category._id?.toString()} category={category} />
-            ))}
+      {categories.length > 0 && (
+        <section id="categories" className="py-12 md:py-24">
+          <div className="container mx-auto px-4">
+            <h2 className="mb-12 text-center font-headline text-4xl font-bold">
+              Shop by Category
+            </h2>
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {categories.map((category) => (
+                <CategoryCard key={category.id} category={category} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
       
       <section className="bg-secondary/50 py-12 md:py-24">
         <div className="container mx-auto px-4">
           <h2 className="mb-12 text-center font-headline text-4xl font-bold">
             Featured Products
           </h2>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product._id?.toString()} product={product} />
-            ))}
-          </div>
-          <div className="mt-12 text-center">
-            <Button asChild variant="outline">
-              <Link href="/products">View All Products <ArrowRight className="ml-2 h-4 w-4" /></Link>
-            </Button>
-          </div>
+           {featuredProducts.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+                {featuredProducts.map((product) => (
+                  <ProductCard key={product._id?.toString()} product={product} />
+                ))}
+              </div>
+              <div className="mt-12 text-center">
+                <Button asChild variant="outline">
+                  <Link href="/products">View All Products <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                </Button>
+              </div>
+            </>
+           ) : (
+            <p className="text-center text-muted-foreground">No featured products yet. Add some from the admin panel!</p>
+           )}
         </div>
       </section>
     </div>

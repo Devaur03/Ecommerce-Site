@@ -20,7 +20,7 @@ export default function Home() {
           fill
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20" />
         <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white">
           <h1 className="font-headline text-5xl font-bold md:text-7xl">
             Design Your Perfect Space
@@ -48,7 +48,7 @@ export default function Home() {
         </div>
       </section>
       
-      <section className="bg-card py-12 md:py-24">
+      <section className="bg-secondary/50 py-12 md:py-24">
         <div className="container mx-auto px-4">
           <h2 className="mb-12 text-center font-headline text-4xl font-bold">
             Featured Products
@@ -60,7 +60,7 @@ export default function Home() {
           </div>
           <div className="mt-12 text-center">
             <Button asChild variant="outline">
-              <Link href="/products">View All Products <ArrowRight className="ml-2" /></Link>
+              <Link href="/products">View All Products <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
           </div>
         </div>

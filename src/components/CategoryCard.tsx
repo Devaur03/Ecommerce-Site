@@ -17,10 +17,10 @@ export default function CategoryCard({ category }: CategoryCardProps) {
             alt={category.name}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
-            data-ai-hint="furniture category"
+            data-ai-hint={category.slug}
           />
           <div className="absolute inset-0 bg-black/40" />
-          <div className="relative flex h-full items-center justify-center">
+          <div className="relative flex h-full items-center justify-center p-4 text-center">
             <h3 className="font-headline text-2xl font-bold text-white">
               {category.name}
             </h3>

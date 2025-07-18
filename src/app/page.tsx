@@ -33,7 +33,7 @@ export default async function Home() {
     <div className="flex flex-col">
       <section className="relative h-[60vh] w-full">
         <Image
-          src="https://placehold.co/1600x900.png"
+          src="https://images.unsplash.com/photo-1558992248-0c612fdea0a1?q=80&w=1600&h=900&auto=format&fit=crop"
           alt="Stylish living room with modern furniture"
           data-ai-hint="modern living room"
           fill

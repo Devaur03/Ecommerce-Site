@@ -21,7 +21,7 @@ async function getCategoryData(slug: string) {
       return { category: null, products: [] };
     }
 
-    const products = await productsCollection.find({ category: slug }).toArray();
+    const products = await productsCollection.find({ category: { $regex: new RegExp(`^${slug}$`, 'i') } }).toArray();
 
     return {
       category: JSON.parse(JSON.stringify(category)) as Category,

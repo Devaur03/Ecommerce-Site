@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { products } from '@/lib/data';
+import { products, categories } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -33,6 +33,8 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     notFound();
   }
 
+  const category = categories.find(c => c.slug === product.category);
+
   const handleAddToCart = () => {
     addToCart(product, quantity);
     toast({
@@ -52,6 +54,14 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
           <BreadcrumbItem>
             <BreadcrumbLink href="/products">Products</BreadcrumbLink>
           </BreadcrumbItem>
+          {category && (
+            <>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink href={`/categories/${category.slug}`}>{category.name}</BreadcrumbLink>
+              </BreadcrumbItem>
+            </>
+          )}
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage>{product.name}</BreadcrumbPage>

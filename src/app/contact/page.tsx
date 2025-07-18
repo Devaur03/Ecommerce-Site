@@ -36,7 +36,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                         <h3 className="text-lg font-semibold">Email</h3>
-                        <p className="text-muted-foreground">hello@furnishflow.com</p>
+                        <p className="text-muted-foreground">dimgaur390@gmail.com</p>
                     </div>
                 </div>
                 <div className="flex items-start gap-4">

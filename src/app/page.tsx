@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -33,9 +34,9 @@ export default async function Home() {
     <div className="flex flex-col">
       <section className="relative h-[60vh] w-full">
         <Image
-          src="https://images.unsplash.com/photo-1558992248-0c612fdea0a1?q=80&w=1600&h=900&auto=format&fit=crop"
+          src="https://placehold.co/1600x900.png"
           alt="Stylish living room with modern furniture"
-          data-ai-hint="modern living room"
+          data-ai-hint="furniture store"
           fill
           className="object-cover"
         />

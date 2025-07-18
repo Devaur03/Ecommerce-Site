@@ -21,8 +21,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Progress } from '@/components/ui/progress';
+import { useToast } from '@/hooks/use-toast';
+import { storage } from '@/lib/firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import type { Product } from '@/types';
 import { categories } from '@/lib/data';
+import { Upload } from 'lucide-react';
 
 type FormData = Omit<Product, 'id' | '_id' | 'reviews'>
 
@@ -37,7 +42,7 @@ const defaultProduct: FormData = {
   name: '',
   description: '',
   price: 0,
-  images: ['https://placehold.co/600x600.png'],
+  images: ['', '', ''],
   category: 'sofas',
   specs: { Material: '', Dimensions: '', Color: '' },
   stock: 0,
@@ -45,15 +50,20 @@ const defaultProduct: FormData = {
 
 export default function ProductForm({ isOpen, onOpenChange, product, onSubmit }: ProductFormProps) {
   const [formData, setFormData] = useState<FormData>(defaultProduct);
+  const [uploadProgress, setUploadProgress] = useState<number[] | null>([null, null, null]);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (isOpen) {
         if (product) {
             const { _id, id, reviews, ...editableData } = product;
-            setFormData(editableData);
+            // Ensure images array has 3 elements for the form
+            const images = [...(editableData.images || []), '', ''].slice(0, 3);
+            setFormData({ ...editableData, images });
         } else {
             setFormData(defaultProduct);
         }
+        setUploadProgress([null, null, null]);
     }
   }, [product, isOpen]);
 
@@ -67,20 +77,97 @@ export default function ProductForm({ isOpen, onOpenChange, product, onSubmit }:
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, specs: { ...prev.specs, [name]: value } }));
   };
+  
+  const handleImageChange = (index: number, value: string) => {
+    setFormData(prev => {
+        const newImages = [...prev.images];
+        newImages[index] = value;
+        return {...prev, images: newImages};
+    });
+  };
 
   const handleCategoryChange = (value: string) => {
     setFormData((prev) => ({ ...prev, category: value }));
   };
 
+  const handleImageUpload = (index: number, file: File) => {
+    if (!file) return;
+
+    const storageRef = ref(storage, `products/${Date.now()}_${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    
+    setUploadProgress(prev => {
+        const newProgress = [...(prev || [null, null, null])];
+        newProgress[index] = 0;
+        return newProgress;
+    });
+
+    uploadTask.on('state_changed', 
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+         setUploadProgress(prev => {
+            const newProgress = [...(prev || [null, null, null])];
+            newProgress[index] = progress;
+            return newProgress;
+        });
+      }, 
+      (error) => {
+        toast({ variant: "destructive", title: "Upload Failed", description: error.message });
+        setUploadProgress(prev => {
+            const newProgress = [...(prev || [null, null, null])];
+            newProgress[index] = null;
+            return newProgress;
+        });
+      }, 
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          handleImageChange(index, downloadURL);
+          toast({ title: "Upload Complete", description: `Image ${index + 1} has been uploaded.` });
+           setUploadProgress(prev => {
+            const newProgress = [...(prev || [null, null, null])];
+            newProgress[index] = null;
+            return newProgress;
+        });
+        });
+      }
+    );
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const submissionData = { ...formData };
+    const submissionData = { ...formData, images: formData.images.filter(img => img !== '') };
     if (product) {
         // @ts-ignore
         submissionData.id = product.id;
     }
     onSubmit(submissionData);
   };
+  
+  const renderImageInput = (index: number) => (
+    <div key={index} className="grid grid-cols-4 items-center gap-4">
+        <Label htmlFor={`image${index}`} className="text-right">
+            Image URL {index + 1}
+        </Label>
+        <div className="col-span-3 space-y-2">
+            <div className="flex gap-2">
+                <Input
+                    id={`image${index}`}
+                    value={formData.images[index] || ''}
+                    onChange={(e) => handleImageChange(index, e.target.value)}
+                    className="flex-grow"
+                    placeholder="https://... or upload"
+                />
+                <Button asChild variant="outline" size="icon" className="relative shrink-0">
+                    <label htmlFor={`file-upload-${index}`}>
+                        <Upload className="h-4 w-4" />
+                        <input id={`file-upload-${index}`} type="file" className="sr-only" accept="image/*" onChange={(e) => e.target.files?.[0] && handleImageUpload(index, e.target.files[0])} />
+                    </label>
+                </Button>
+            </div>
+            {uploadProgress?.[index] !== null && <Progress value={uploadProgress[index]} className="h-2" />}
+        </div>
+    </div>
+  )
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -121,18 +208,11 @@ export default function ProductForm({ isOpen, onOpenChange, product, onSubmit }:
             <Label htmlFor="stock" className="text-right">Stock</Label>
             <Input id="stock" name="stock" type="number" value={formData.stock} onChange={handleChange} className="col-span-3" required />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="image" className="text-right">Image URL</Label>
-            <Input id="image" name="image" value={formData.images[0]} onChange={(e) => setFormData(prev => ({...prev, images: [e.target.value]}))} className="col-span-3" required />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="image2" className="text-right">Image URL 2</Label>
-            <Input id="image2" name="image2" value={formData.images[1] || ''} onChange={(e) => setFormData(prev => ({...prev, images: [prev.images[0], e.target.value, prev.images[2] || '']}))} className="col-span-3" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="image3" className="text-right">Image URL 3</Label>
-            <Input id="image3" name="image3" value={formData.images[2] || ''} onChange={(e) => setFormData(prev => ({...prev, images: [prev.images[0], prev.images[1] || '', e.target.value]}))} className="col-span-3" />
-          </div>
+          
+          <h3 className="font-headline text-lg mt-4 col-span-4">Images</h3>
+          {renderImageInput(0)}
+          {renderImageInput(1)}
+          {renderImageInput(2)}
 
           <h3 className="font-headline text-lg mt-4 col-span-4">Specifications</h3>
            <div className="grid grid-cols-4 items-center gap-4">

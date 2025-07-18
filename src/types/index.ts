@@ -1,3 +1,4 @@
+
 export interface Review {
     id: number;
     rating: number;
@@ -38,4 +39,13 @@ export interface WishlistItem {
   name: string;
   price: number;
   image: string;
+}
+
+export interface SignInData {
+    email: string;
+    password: string;
+}
+
+export interface SignUpData extends SignInData {
+    name: string;
 }

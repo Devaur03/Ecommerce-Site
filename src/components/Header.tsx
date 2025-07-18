@@ -37,7 +37,7 @@ export default function Header() {
   const { wishlistCount } = useWishlist();
   const pathname = usePathname();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, signInWithGoogle, signOut } = useAuth();
+  const { user, signOut } = useAuth();
 
 
   if (pathname.startsWith('/admin')) {
@@ -50,7 +50,7 @@ export default function Header() {
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user?.photoURL || undefined} alt={user?.displayName || 'User'} />
-            <AvatarFallback>{user?.displayName?.charAt(0)}</AvatarFallback>
+            <AvatarFallback>{user?.displayName?.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -124,9 +124,11 @@ export default function Header() {
           {user ? (
             <UserMenu />
           ) : (
-             <Button variant="ghost" size="sm" onClick={signInWithGoogle}>
-              <LogIn className="mr-2 h-4 w-4" />
-              Sign In
+             <Button asChild variant="ghost" size="sm">
+                <Link href="/login">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Sign In
+                </Link>
             </Button>
           )}
 

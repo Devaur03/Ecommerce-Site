@@ -2,15 +2,16 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
-// IMPORTANT: Replace with your actual Firebase config
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAZWLYSZwXzt0DXbCC-5j6dIyLz9eY5_Vk",
+  authDomain: "ecommercefurniture03.firebaseapp.com",
+  projectId: "ecommercefurniture03",
+  storageBucket: "ecommercefurniture03.appspot.com",
+  messagingSenderId: "253443713410",
+  appId: "1:253443713410:web:d6dd430a62302612d7879b",
+  measurementId: "G-Y6S07K2S3E"
 };
+
 
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();

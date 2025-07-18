@@ -11,13 +11,15 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const imageUrl = product.images && product.images.length > 0 ? product.images[0] : 'https://placehold.co/600x600.png';
+
   return (
     <Card className="group overflow-hidden rounded-lg shadow-sm transition-shadow hover:shadow-lg">
       <Link href={`/products/${product.id}`}>
         <CardContent className="p-0">
           <div className="relative h-64 w-full">
             <Image
-              src={product.images[0]}
+              src={imageUrl}
               alt={product.name}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"

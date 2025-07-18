@@ -8,36 +8,36 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { getCategoriesCollection, getProductsCollection } from '@/lib/mongodb';
-import type { Product, Category } from '@/types';
+import { getProductsCollection } from '@/lib/mongodb';
+import type { Product } from '@/types';
+import { categories } from '@/lib/data';
 
-async function getCategoryData(slug: string) {
+async function getCategoryProducts(slug: string) {
   try {
-    const categoriesCollection = await getCategoriesCollection();
     const productsCollection = await getProductsCollection();
-
-    const category = await categoriesCollection.findOne({ slug: slug });
-    if (!category) {
-      return { category: null, products: [] };
-    }
-
     const products = await productsCollection.find({ category: { $regex: new RegExp(`^${slug}$`, 'i') } }).toArray();
 
-    return {
-      category: JSON.parse(JSON.stringify(category)) as Category,
-      products: JSON.parse(JSON.stringify(products)) as Product[],
-    };
+    return JSON.parse(JSON.stringify(products)) as Product[];
   } catch (e) {
     console.error(e);
-    return { category: null, products: [] };
+    return [];
   }
 }
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
-  const { category, products: categoryProducts } = await getCategoryData(params.slug);
+// Helper to get category name from static data, since we don't have a categories collection
+function getCategoryName(slug: string): string {
+    const category = categories.find(c => c.slug.toLowerCase() === slug.toLowerCase());
+    // Capitalize first letter
+    return category ? category.name : slug.charAt(0).toUpperCase() + slug.slice(1);
+}
 
-  if (!category) {
-    notFound();
+export default async function CategoryPage({ params }: { params: { slug: string } }) {
+  const categoryProducts = await getCategoryProducts(params.slug);
+  const categoryName = getCategoryName(params.slug);
+
+  if (categoryProducts.length === 0) {
+     // We show the page even if there are no products, to avoid a 404.
+     // The user might not have added products to this category yet.
   }
 
   return (
@@ -49,12 +49,12 @@ export default async function CategoryPage({ params }: { params: { slug: string 
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>{category.name}</BreadcrumbPage>
+            <BreadcrumbPage>{categoryName}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
       <h1 className="mb-8 text-center font-headline text-4xl font-bold">
-        {category.name}
+        {categoryName}
       </h1>
       {categoryProducts.length > 0 ? (
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

@@ -5,6 +5,8 @@ export const categories: Category[] = [
   { id: 2, name: 'Chairs', slug: 'chairs', image: 'https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=400&h=400&auto=format&fit=crop' },
   { id: 3, name: 'Tables', slug: 'tables', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=400&h=400&auto=format&fit=crop' },
   { id: 4, name: 'Beds', slug: 'beds', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=400&h=400&auto=format&fit=crop' },
+  { id: 5, name: 'Storage', slug: 'storage', image: 'https://images.unsplash.com/photo-1580424783396-85b565353185?q=80&w=400&h=400&auto=format&fit=crop' },
+  { id: 6, name: 'Decor', slug: 'decor', image: 'https://images.unsplash.com/photo-1534349762237-7a2c36a46281?q=80&w=400&h=400&auto=format&fit=crop' },
 ];
 
 const sampleReviews: Review[] = [
@@ -122,7 +124,7 @@ export const products: Product[] = [
     name: 'Modular Sectional Sofa',
     description: 'A versatile sectional sofa with movable modules to fit any room layout. Upholstered in a durable, stain-resistant fabric.',
     price: 1599.99,
-    images: ['https://images.unsplash.com/photo-1523755231516-e43fd2e8dca5?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1493663284031-b7e33ef2d92a?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1616464916356-2a772ab1032d?q=80&w=600&h=600&auto=format&fit=crop'],
+    images: ['https://images.unsplash.com/photo-1540932239986-30128078f3c5?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1493663284031-b7e33ef2d92a?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1616464916356-2a772ab1032d?q=80&w=600&h=600&auto=format&fit=crop'],
     category: 'sofas',
     specs: {
       Material: 'Performance Fabric',
@@ -147,4 +149,81 @@ export const products: Product[] = [
     stock: 7,
     reviews: [],
   },
+  {
+    id: 9,
+    name: 'Modern Oak Bookshelf',
+    description: 'A sleek and sturdy bookshelf with a minimalist design, perfect for displaying books and decor.',
+    price: 450.00,
+    images: [
+      'https://images.unsplash.com/photo-1580424783396-85b565353185?q=80&w=600&h=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1594895982297-849a63412599?q=80&w=600&h=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=600&h=600&auto=format&fit=crop',
+    ],
+    category: 'storage',
+    specs: {
+      Material: 'Solid Oak, Steel Frame',
+      Dimensions: '36"W x 12"D x 72"H',
+      Color: 'Natural Oak, Black',
+    },
+    stock: 18,
+    reviews: [],
+  },
+  {
+    id: 10,
+    name: 'Ceramic Planter Set',
+    description: 'A set of three modern ceramic planters in varying sizes, perfect for adding a touch of green to your space.',
+    price: 75.00,
+    images: [
+      'https://images.unsplash.com/photo-1534349762237-7a2c36a46281?q=80&w=600&h=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1592205830484-7a3b3647f818?q=80&w=600&h=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1485955900006-10f4d324d411?q=80&w=600&h=600&auto=format&fit=crop',
+    ],
+    category: 'decor',
+    specs: {
+      Material: 'Ceramic',
+      Dimensions: 'S: 4"H, M: 6"H, L: 8"H',
+      Color: 'White, Grey, Black',
+    },
+    stock: 30,
+    reviews: [],
+  },
+  {
+    id: 11,
+    name: 'Walnut Sideboard',
+    description: 'A stylish and functional sideboard with clean lines and ample storage space, crafted from rich walnut wood.',
+    price: 1100.00,
+    images: [
+      'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?q=80&w=600&h=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1616627780414-b6d16503de24?q=80&w=600&h=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1508920958912-a1e0b5718a38?q=80&w=600&h=600&auto=format&fit=crop',
+    ],
+    category: 'storage',
+    specs: {
+      Material: 'Walnut Veneer, Solid Wood Legs',
+      Dimensions: '60"W x 18"D x 30"H',
+      Color: 'Rich Walnut',
+    },
+    stock: 9,
+    reviews: [],
+  },
+  {
+    id: 12,
+    name: 'Abstract Wall Art',
+    description: 'A large, vibrant abstract canvas print to be the focal point of any room. Adds a pop of color and modern flair.',
+    price: 250.00,
+    images: [
+      'https://images.unsplash.com/photo-1552581234-26160f608093?q=80&w=600&h=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=600&h=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1554228422-7235a2a1a852?q=80&w=600&h=600&auto=format&fit=crop',
+    ],
+    category: 'decor',
+    specs: {
+      Material: 'Canvas, Wood Frame',
+      Dimensions: '48"W x 36"H',
+      Color: 'Multicolor',
+    },
+    stock: 22,
+    reviews: [],
+  },
 ];
+    

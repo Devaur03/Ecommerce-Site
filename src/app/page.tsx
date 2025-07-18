@@ -17,7 +17,7 @@ async function getHomePageData() {
     const categoriesCollection = db.collection<Category>('categories');
 
     const featuredProducts = await productsCollection.find({}).limit(4).toArray();
-    const categories = await categoriesCollection.find({}).toArray();
+    const categories = await categoriesCollection.find({}).limit(4).toArray();
 
     return {
       featuredProducts: JSON.parse(JSON.stringify(featuredProducts)) as Product[],
@@ -90,3 +90,5 @@ export default async function Home() {
     </div>
   );
 }
+
+    

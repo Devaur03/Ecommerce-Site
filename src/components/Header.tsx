@@ -1,7 +1,8 @@
+
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, Menu } from 'lucide-react';
+import { ShoppingCart, Menu, UserCog } from 'lucide-react';
 import Logo from '@/components/icons/Logo';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/hooks/useCart';
@@ -24,6 +25,10 @@ export default function Header() {
   const { cartCount } = useCart();
   const pathname = usePathname();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  if (pathname.startsWith('/admin')) {
+    return null; // Don't render header for admin pages
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -53,6 +58,13 @@ export default function Header() {
                 </span>
               )}
               <span className="sr-only">Shopping Cart</span>
+            </Link>
+          </Button>
+
+          <Button asChild variant="ghost" size="icon">
+            <Link href="/admin/login">
+              <UserCog className="h-5 w-5" />
+              <span className="sr-only">Admin Login</span>
             </Link>
           </Button>
 

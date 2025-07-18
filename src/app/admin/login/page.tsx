@@ -20,7 +20,7 @@ export default function AdminLoginPage() {
     e.preventDefault();
     // In a real app, you'd have proper authentication.
     // For this prototype, we'll use a simple check.
-    if (email === 'admin@furnishflow.com' && password === 'password') {
+    if (email === 'dimgaur390@gmail.com' && password === 'Devansh03') {
       // We'll use localStorage to simulate a session
       localStorage.setItem('ff_admin_auth', 'true');
       toast({
@@ -70,7 +70,7 @@ export default function AdminLoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <p className="text-xs text-center text-muted-foreground">Hint: use `password`</p>
+            <p className="text-xs text-center text-muted-foreground">Hint: use `Devansh03`</p>
             <Button type="submit" className="w-full">
               Sign In
             </Button>

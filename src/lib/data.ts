@@ -62,7 +62,7 @@ export const products: Product[] = [
     name: 'Scandinavian Dining Table',
     description: 'A minimalist dining table crafted from solid oak, featuring clean lines and a natural finish. Seats up to six people.',
     price: 650.00,
-    images: ['https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=600&h=600&auto=format&fit=crop'],
+    images: ['https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1517705008128-361805f62e86?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1530032953836-32d1d0780f6d?q=80&w=600&h=600&auto=format&fit=crop'],
     category: 'tables',
     specs: {
       Material: 'Solid Oak',
@@ -92,7 +92,7 @@ export const products: Product[] = [
     name: 'Leather Lawson Armchair',
     description: 'A classic armchair with supple top-grain leather and a sturdy hardwood frame. Ages beautifully over time.',
     price: 950.00,
-    images: ['https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?q=80&w=600&h=600&auto=format&fit=crop'],
+    images: ['https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1617173944193-9d18b6c433c4?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1632899458852-88b652875a6c?q=80&w=600&h=600&auto=format&fit=crop'],
     category: 'chairs',
     specs: {
       Material: 'Top-grain Leather',
@@ -107,7 +107,7 @@ export const products: Product[] = [
     name: 'Industrial Coffee Table',
     description: 'A rustic coffee table combining a solid mango wood top with a sturdy iron base. Adds character to any living space.',
     price: 350.00,
-    images: ['https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?q=80&w=600&h=600&auto=format&fit=crop'],
+    images: ['https://images.unsplash.com/photo-1613204224104-2b73e35c814b?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1569084949318-4566127c28c8?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1543536448-d209d2d13a1c?q=80&w=600&h=600&auto=format&fit=crop'],
     category: 'tables',
     specs: {
       Material: 'Mango Wood, Iron',
@@ -122,7 +122,7 @@ export const products: Product[] = [
     name: 'Modular Sectional Sofa',
     description: 'A versatile sectional sofa with movable modules to fit any room layout. Upholstered in a durable, stain-resistant fabric.',
     price: 1599.99,
-    images: ['https://images.unsplash.com/photo-1523755231516-e43fd2e8dca5?q=80&w=600&h=600&auto=format&fit=crop'],
+    images: ['https://images.unsplash.com/photo-1523755231516-e43fd2e8dca5?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1493663284031-b7e33ef2d92a?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1594895982297-849a63412599?q=80&w=600&h=600&auto=format&fit=crop'],
     category: 'sofas',
     specs: {
       Material: 'Performance Fabric',
@@ -137,7 +137,7 @@ export const products: Product[] = [
     name: 'Canopy Bed Frame',
     description: 'Create a statement with this elegant metal canopy bed. Its sleek, four-poster design adds a touch of romance and drama.',
     price: 950.00,
-    images: ['https://images.unsplash.com/photo-1599508003649-1d9e2652a265?q=80&w=600&h=600&auto=format&fit=crop'],
+    images: ['https://images.unsplash.com/photo-1599508003649-1d9e2652a265?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1616627780414-b6d16503de24?q=80&w=600&h=600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1566605973348-740a3d76b6b7?q=80&w=600&h=600&auto=format&fit=crop'],
     category: 'beds',
     specs: {
       Material: 'Steel',

@@ -45,6 +45,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const handleAddToCart = () => {
     addToCart(product, quantity);
     toast({
+      variant: "success",
       title: "Added to cart!",
       description: `${quantity} x ${product.name} has been added to your cart.`,
     });

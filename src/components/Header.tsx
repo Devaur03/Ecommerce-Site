@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, Menu, UserCog, LogIn, LogOut, Heart } from 'lucide-react';
+import { ShoppingCart, Menu, UserCog, LogIn, LogOut, Heart, Search } from 'lucide-react';
 import Logo from '@/components/icons/Logo';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/hooks/useCart';
@@ -25,6 +25,7 @@ import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { useWishlist } from '@/hooks/useWishlist';
+import { Input } from './ui/input';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -80,7 +81,7 @@ export default function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="fixed top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <Logo />
         <nav className="hidden items-center gap-6 text-sm md:flex">
@@ -97,12 +98,20 @@ export default function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-4">
+
+        <div className="hidden md:flex flex-1 max-w-sm ml-6">
+             <div className="relative w-full">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input placeholder="Search products..." className="w-full pl-9" />
+            </div>
+        </div>
+
+        <div className="flex items-center gap-2">
            <Button asChild variant="ghost" size="icon">
             <Link href="/wishlist">
               <Heart className="h-5 w-5" />
               {user && wishlistCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+                <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                   {wishlistCount}
                 </span>
               )}
@@ -113,7 +122,7 @@ export default function Header() {
             <Link href="/cart">
               <ShoppingCart className="h-5 w-5" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+                <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                   {cartCount}
                 </span>
               )}
@@ -142,6 +151,10 @@ export default function Header() {
             <SheetContent side="left">
               <div className="flex flex-col gap-6 p-4">
                 <Logo />
+                 <div className="relative w-full">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input placeholder="Search products..." className="w-full pl-9" />
+                </div>
                 <nav className="flex flex-col gap-4">
                   {navLinks.map((link) => (
                      <Link

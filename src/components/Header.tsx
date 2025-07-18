@@ -39,27 +39,12 @@ export default function Header() {
   const { wishlistCount } = useWishlist();
   const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
-
-  useEffect(() => {
-    // Sync search input with URL query param
-    setSearchQuery(searchParams.get('q') || '');
-  }, [searchParams]);
 
   if (pathname.startsWith('/admin')) {
     return null; // Don't render header for admin pages
   }
-
-  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      if(isMobileMenuOpen) setMobileMenuOpen(false);
-    }
-  };
 
   const UserMenu = () => (
     <DropdownMenu>
@@ -89,19 +74,32 @@ export default function Header() {
     </DropdownMenu>
   );
   
-  const SearchForm = ({ inSheet = false }: { inSheet?: boolean }) => (
-    <form onSubmit={handleSearchSubmit} className={cn("w-full max-w-sm", inSheet ? '' : 'hidden md:block')}>
-       <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search products..." 
-            className="w-full pl-9 bg-background/50" 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-      </div>
-    </form>
-  );
+  const SearchForm = ({ inSheet = false }: { inSheet?: boolean }) => {
+    const searchParams = useSearchParams();
+    const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
+
+    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+          router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+          if(isMobileMenuOpen) setMobileMenuOpen(false);
+        }
+      };
+      
+    return (
+        <form onSubmit={handleSearchSubmit} className={cn("w-full max-w-sm", inSheet ? '' : 'hidden md:block')}>
+           <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input 
+                placeholder="Search products..." 
+                className="w-full pl-9 bg-background/50" 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+          </div>
+        </form>
+    )
+  };
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
